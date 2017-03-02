@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <omp.h>
 
 #include "math-toolkit.h"
 #include "primitives.h"
@@ -337,8 +338,9 @@ static void calculateBasisVectors(point3 u, point3 v, point3 w,
 /* @brief protect color value overflow */
 static void protect_color_overflow(color c)
 {
-    for (int i = 0; i < 3; i++)
-        if (c[i] > 1.0) c[i] = 1.0;
+    if(c[0]>1.0) c[0]=1.0;
+    if(c[1]>1.0) c[1]=1.0;
+    if(c[2]>1.0) c[2]=1.0;
 }
 
 static unsigned int ray_color(const point3 e, double t,
