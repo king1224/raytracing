@@ -11,6 +11,7 @@
 #define MAX_DISTANCE 1000000000000.0
 #define MIN_DISTANCE 0.00001
 #define SAMPLES 4
+#define THREAD_CNT 1024
 
 #define SQUARE(x) (x * x)
 #define MAX(a, b) (a > b ? a : b)
@@ -469,6 +470,9 @@ void raytracing(uint8_t *pixels, color background_color,
     idx_stack stk;
 
     int factor = sqrt(SAMPLES);
+    #pragma omp parallel num_threads(THREAD_CNT) \
+    shared(height,width,factor) private(stk,d,object_color)
+    #pragma omp for schedule(guided) collapse(2)
     for (int j = 0; j < height; j++) {
         for (int i = 0; i < width; i++) {
             double r = 0, g = 0, b = 0;
